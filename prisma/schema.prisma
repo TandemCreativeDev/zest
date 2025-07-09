@@ -14,18 +14,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String     @unique
   password      String?
   image         String?
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  chatrooms Chatroom[]
-  accounts  Account[]
-  sessions  Session[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  accounts      Account[]
+  chatrooms     Chatroom[]
+  sessions      Session[]
 
   @@map("users")
 }
@@ -36,15 +35,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -55,8 +53,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
@@ -72,32 +69,31 @@ model VerificationToken {
 
 model Chatroom {
   id        String    @id @default(uuid())
-  roomUrl   String?   @unique
   title     String
   createdAt DateTime  @default(now())
+  roomUrl   String?   @unique
   userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
   messages  Message[]
 
-  user User? @relation(fields: [userId], references: [id])
-
+  @@unique([title, userId], name: "unique_title_per_user")
   @@map("chatrooms")
 }
 
 model Message {
   id           String        @id @default(uuid())
-  chatroomId   String
   alias        String
   message      String
   timestamp    DateTime      @default(now())
+  chatroomId   String
   linkPreviews LinkPreview[]
-
-  chatroom Chatroom @relation(fields: [chatroomId], references: [id])
+  chatroom     Chatroom      @relation(fields: [chatroomId], references: [id])
 
   @@map("messages")
 }
 
 model LinkPreview {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   messageId   String
   url         String
   title       String?
@@ -107,8 +103,7 @@ model LinkPreview {
   favicon     String?
   domain      String?
   createdAt   DateTime @default(now())
-
-  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  message     Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
   @@map("link_previews")
 }

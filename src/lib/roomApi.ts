@@ -26,7 +26,9 @@ export const createRoom = async (title: string): Promise<void> => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create room");
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.error || "Failed to create room";
+    throw new Error(errorMessage);
   }
 };
 

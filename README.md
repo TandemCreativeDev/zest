@@ -71,6 +71,7 @@ If you would like to contribute, please read [CONTRIBUTING.md](docs/CONTRIBUTING
 - **Theme Management:** next-themes for system preference detection
 
 ## Documentation
+
 - [Changelog](docs/CHANGELOG.md) - Project changelog and release notes
 - [Standards & Guidelines](docs/CLAUDE.md) - Development standards and project guidelines
-- [Test Documentation](test/README.md) - Testing principles and structure
+- [Database Setup](docs/DATABASE_SETUP.md) - How to set up the local database for development
